@@ -112,6 +112,26 @@ def get_messages(user_from_id, user_to_id ):
     return Response(json.dumps(data, cls=connector.AlchemyEncoder), mimetype='application/json')
 
 
+@app.route('/gabriel/messages', methods = ["POST"])
+def create_message():
+    data = json.loads(request.data)
+    user_to_id = data['user_to_id']
+    user_from_id = data['user_from_id']
+    content = data['content']
+
+    message = entities.Message(
+    user_to_id = user_to_id,
+    user_from_id = user_from_id,
+    content = content)
+
+    #2. Save in database
+    db_session = db.getSession(engine)
+    db_session.add(message)
+    db_session.commit()
+
+    response = {'message': 'created'}
+    return Response(json.dumps(response, cls=connector.AlchemyEncoder), status=200, mimetype='application/json')
+
 if __name__ == '__main__':
     app.secret_key = ".."
     app.run(port=5000, threaded=True, host=('127.0.0.1'))

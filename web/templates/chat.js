@@ -1,4 +1,5 @@
 var currentUserId = 0;
+var currentClickedId = 0;
 function whoami(){
         $.ajax({
             url:'/current',
@@ -45,7 +46,7 @@ function whoami(){
     function loadMessages(user_from_id, user_to_id){
         //alert(user_from_id);
         //alert(user_to_id);
-
+        currentClickedId = user_to_id;
         $.ajax({
             url:'/messages/'+user_from_id+"/"+user_to_id,
             type:'GET',
@@ -58,4 +59,31 @@ function whoami(){
                 alert(JSON.stringify(response));
             }
         });
+    }
+
+    function sendMessage(){
+        var message = $('#postmessage').val();
+        $('#postmessage').val('');
+
+        var data = JSON.stringify({
+                "user_from_id": currentUserId,
+                "user_to_id": currentClickedId,
+                "content": message
+            });
+
+        $.ajax({
+            url:'/gabriel/messages',
+            type:'POST',
+            contentType: 'application/json',
+            data : data,
+            dataType:'json',
+            success: function(response){
+                alert(JSON.stringify(response));
+            },
+            error: function(response){
+                alert(JSON.stringify(response));
+            }
+        });
+
+
     }
