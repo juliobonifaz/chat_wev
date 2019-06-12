@@ -1,3 +1,4 @@
+var currentUserId = 0;
 function whoami(){
         $.ajax({
             url:'/current',
@@ -8,6 +9,7 @@ function whoami(){
                 alert(JSON.stringify(response));
                 $('#cu_username').html(response['username'])
                 var name = response['name']+" "+response['fullname'];
+                currentUserId = response['id']
                 $('#cu_name').html(name);
             },
             error: function(response){
@@ -26,7 +28,7 @@ function whoami(){
                 //alert(JSON.stringify(response));
                 var i = 0;
                 $.each(response, function(){
-                    f = '<div class="alert" onclick=alert('+response[i].id+') >';
+                    f = '<div class="alert" onclick=alert('+currentUserId+','+response[i].id+') >';
                     f = f + response[i].username;
                     f = f + '</div>';
                     i = i+1;
