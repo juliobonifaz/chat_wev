@@ -54,6 +54,7 @@ function whoami(){
             dataType:'json',
             success: function(response){
                 alert(JSON.stringify(response));
+                alert('funciona')
             },
             error: function(response){
                 alert(JSON.stringify(response));

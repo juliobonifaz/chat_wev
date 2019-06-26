@@ -83,15 +83,18 @@ def authenticate():
 
 @app.route('/current', methods = ["GET"])
 def current_user():
-    db_session = db.getSession(engine)
-    user = db_session.query(entities.User).filter(
-        entities.User.id == session['logged_user']
-        ).first()
-    return Response(json.dumps(
-            user,
-            cls=connector.AlchemyEncoder),
-            mimetype='application/json'
-        )
+    try:
+        db_session = db.getSession(engine)
+        user = db_session.query(entities.User).filter(
+            entities.User.id == session['logged_user']
+            ).first()
+        return Response(json.dumps(
+                user,
+                cls=connector.AlchemyEncoder),
+                mimetype='application/json'
+            )
+    except:
+        return render_template('parte2')
 
 @app.route('/logout', methods = ["GET"])
 def logout():
